@@ -1,4 +1,4 @@
-# AI Milestones Mix and Match Game
+# AI Milestones Drag and Drop Game
 
 A simple drag and drop game to match AI milestones with their corresponding years.
 
