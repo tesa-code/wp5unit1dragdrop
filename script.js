@@ -1,8 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const items = document.querySelectorAll('.item');
     const matchContainer = document.getElementById('match-container');
+    const submitBtn = document.getElementById('submit-btn');
+    const resultDiv = document.getElementById('result');
 
     let draggedItem = null;
+    let matches = [];
 
     items.forEach(item => {
         item.addEventListener('dragstart', () => {
@@ -45,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span>${item.textContent}</span>
                     `;
                     matchContainer.appendChild(match);
+                    matches.push({ milestone: draggedValue, year: targetValue });
                 } else if (draggedItem.parentElement.classList.contains('years') && item.parentElement.classList.contains('milestones')) {
                     const match = document.createElement('div');
                     match.className = 'match';
@@ -53,8 +57,35 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span>${draggedItem.textContent}</span>
                     `;
                     matchContainer.appendChild(match);
+                    matches.push({ milestone: item.getAttribute('data-value'), year: draggedValue });
                 }
             }
         });
+    });
+
+    submitBtn.addEventListener('click', () => {
+        const correctMatches = {
+            'A': '3',
+            'B': '4',
+            'C': '5',
+            'D': '2',
+            'E': '1'
+        };
+
+        let allCorrect = true;
+
+        matches.forEach(match => {
+            if (correctMatches[match.milestone] !== match.year) {
+                allCorrect = false;
+            }
+        });
+
+        if (allCorrect) {
+            resultDiv.textContent = 'All matches are correct!';
+            resultDiv.style.color = 'green';
+        } else {
+            resultDiv.textContent = 'Some matches are incorrect. Please try again.';
+            resultDiv.style.color = 'red';
+        }
     });
 });
