@@ -35,13 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('dragenter', (e) => {
             e.preventDefault();
             if (!item.classList.contains('used')) {
-                item.style.backgroundColor = '#3e8e41';
+                item.style.backgroundColor = '#f0f0f0';
             }
         });
 
         item.addEventListener('dragleave', () => {
             if (!item.classList.contains('used')) {
-                item.style.backgroundColor = '#4CAF50';
+                item.style.backgroundColor = '#fff';
             }
         });
 
@@ -50,19 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const draggedValue = draggedItem.getAttribute('data-value');
                 const targetValue = item.getAttribute('data-value');
 
-                if (draggedItem.parentElement.classList.contains('milestones') && item.parentElement.classList.contains('years')) {
-                    const match = document.createElement('div');
-                    match.className = 'match';
-                    match.innerHTML = `
-                        <span>${draggedItem.textContent}</span>
-                        <span>${item.textContent}</span>
-                    `;
-                    matchContainer.appendChild(match);
-                    matches.push({ milestone: draggedValue, year: targetValue });
-                    usedYears.add(targetValue);
-                    draggedItem.classList.add('used');
-                    item.classList.add('used');
-                } else if (draggedItem.parentElement.classList.contains('years') && item.parentElement.classList.contains('milestones')) {
+                if (draggedItem.parentElement.classList.contains('years') && item.parentElement.classList.contains('milestones')) {
                     const match = document.createElement('div');
                     match.className = 'match';
                     match.innerHTML = `
