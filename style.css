@@ -43,6 +43,11 @@ h2 {
     background-color: #45a049;
 }
 
+.item.used {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 .matches {
     margin-top: 20px;
     background-color: #fff;
@@ -66,7 +71,7 @@ h2 {
     border-radius: 5px;
 }
 
-#submit-btn {
+#submit-btn, #reset-btn {
     margin-top: 20px;
     padding: 10px 20px;
     background-color: #4CAF50;
@@ -76,7 +81,7 @@ h2 {
     cursor: pointer;
 }
 
-#submit-btn:hover {
+#submit-btn:hover, #reset-btn:hover {
     background-color: #45a049;
 }
 

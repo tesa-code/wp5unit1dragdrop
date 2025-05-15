@@ -2,23 +2,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = document.querySelectorAll('.item');
     const matchContainer = document.getElementById('match-container');
     const submitBtn = document.getElementById('submit-btn');
+    const resetBtn = document.getElementById('reset-btn');
     const resultDiv = document.getElementById('result');
 
     let draggedItem = null;
     let matches = [];
+    let usedYears = new Set();
 
     items.forEach(item => {
         item.addEventListener('dragstart', () => {
-            draggedItem = item;
-            setTimeout(() => {
-                item.style.opacity = '0.5';
-            }, 0);
+            if (!item.classList.contains('used')) {
+                draggedItem = item;
+                setTimeout(() => {
+                    item.style.opacity = '0.5';
+                }, 0);
+            }
         });
 
         item.addEventListener('dragend', () => {
             setTimeout(() => {
-                item.style.opacity = '1';
-                draggedItem = null;
+                if (draggedItem) {
+                    draggedItem.style.opacity = '1';
+                    draggedItem = null;
+                }
             }, 0);
         });
 
@@ -28,15 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         item.addEventListener('dragenter', (e) => {
             e.preventDefault();
-            item.style.backgroundColor = '#3e8e41';
+            if (!item.classList.contains('used')) {
+                item.style.backgroundColor = '#3e8e41';
+            }
         });
 
         item.addEventListener('dragleave', () => {
-            item.style.backgroundColor = '#4CAF50';
+            if (!item.classList.contains('used')) {
+                item.style.backgroundColor = '#4CAF50';
+            }
         });
 
         item.addEventListener('drop', () => {
-            if (draggedItem !== item) {
+            if (draggedItem !== item && !item.classList.contains('used') && !draggedItem.classList.contains('used')) {
                 const draggedValue = draggedItem.getAttribute('data-value');
                 const targetValue = item.getAttribute('data-value');
 
@@ -49,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                     matchContainer.appendChild(match);
                     matches.push({ milestone: draggedValue, year: targetValue });
+                    usedYears.add(targetValue);
+                    draggedItem.classList.add('used');
+                    item.classList.add('used');
                 } else if (draggedItem.parentElement.classList.contains('years') && item.parentElement.classList.contains('milestones')) {
                     const match = document.createElement('div');
                     match.className = 'match';
@@ -58,6 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                     matchContainer.appendChild(match);
                     matches.push({ milestone: item.getAttribute('data-value'), year: draggedValue });
+                    usedYears.add(draggedValue);
+                    draggedItem.classList.add('used');
+                    item.classList.add('used');
                 }
             }
         });
@@ -87,5 +103,15 @@ document.addEventListener('DOMContentLoaded', () => {
             resultDiv.textContent = 'Some matches are incorrect. Please try again.';
             resultDiv.style.color = 'red';
         }
+    });
+
+    resetBtn.addEventListener('click', () => {
+        matches = [];
+        usedYears.clear();
+        matchContainer.innerHTML = '';
+        resultDiv.textContent = '';
+        document.querySelectorAll('.item').forEach(item => {
+            item.classList.remove('used');
+        });
     });
 });
